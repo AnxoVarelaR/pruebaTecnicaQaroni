@@ -1,7 +1,6 @@
 package com.qrn.pruebaTecnicaQaroni.books.infrastructure;
 
 import com.qrn.pruebaTecnicaQaroni.CycleAvoidingMappingContext;
-import com.qrn.pruebaTecnicaQaroni.authors.domain.Author;
 import com.qrn.pruebaTecnicaQaroni.books.domain.Book;
 import com.qrn.pruebaTecnicaQaroni.books.domain.ports.out.BookRepositoryPort;
 import org.springframework.stereotype.Component;
@@ -51,10 +50,5 @@ public class JpaBookRepositoryAdapter implements BookRepositoryPort {
             return Optional.of(id);
         }
         return Optional.empty();
-    }
-
-    @Override
-    public List<Author> bookAuthors() {
-        return List.of();
     }
 }

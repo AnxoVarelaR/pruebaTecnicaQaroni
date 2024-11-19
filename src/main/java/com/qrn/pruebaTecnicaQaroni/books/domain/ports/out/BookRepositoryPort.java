@@ -12,6 +12,4 @@ public interface BookRepositoryPort {
     List<Book> findAll();
     Optional<Book> update(Book book);
     Optional<Long> deleteById(Long id);
-    List<Author> bookAuthors();
-
 }

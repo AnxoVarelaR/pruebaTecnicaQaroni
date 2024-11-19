@@ -1,10 +1,17 @@
 package com.qrn.pruebaTecnicaQaroni.users.infrastructure;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long usr_id;
@@ -12,18 +19,25 @@ public class UserEntity {
     private String usr_surname;
     private String usr_password;
     private String usr_email;
-    private int rol_id;
+    @ManyToMany(
+            fetch = FetchType.LAZY
+    )
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "usr_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
+    )
+    private List<RoleEntity> usr_roles = new ArrayList<>();
 
     public UserEntity() {
     }
 
-    public UserEntity(long usr_id, String usr_name, String usr_surname, String usr_password, String usr_email, int rol_id) {
+    public UserEntity(long usr_id, String usr_name, String usr_surname, String usr_password, String usr_email) {
         this.usr_id = usr_id;
         this.usr_name = usr_name;
         this.usr_surname = usr_surname;
         this.usr_password = usr_password;
         this.usr_email = usr_email;
-        this.rol_id = rol_id;
     }
 
     public long getUsr_id() {
@@ -66,11 +80,54 @@ public class UserEntity {
         this.usr_email = usr_email;
     }
 
-    public int getRol_id() {
-        return rol_id;
+    public List<RoleEntity> getUsr_roles() {
+        return usr_roles;
     }
 
-    public void setRol_id(int rol_id) {
-        this.rol_id = rol_id;
+    public void setUsr_roles(List<RoleEntity> usr_roles) {
+        this.usr_roles = usr_roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = usr_roles.stream().flatMap(
+                roleEntity -> roleEntity.getRol_permissions().stream().map(
+                     permissionEntity -> new SimpleGrantedAuthority(permissionEntity.getPerm_name())
+                )
+        ).collect(Collectors.toList());
+        for(RoleEntity roleEntity : usr_roles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + roleEntity.getRol_name()));
+        }
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.usr_password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.usr_email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }

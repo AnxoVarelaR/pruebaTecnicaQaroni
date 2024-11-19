@@ -15,7 +15,11 @@ public class AuthorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auth_id;
     private String auth_name;
-
+    @ManyToMany(
+            mappedBy = "bk_authors",
+            fetch = FetchType.LAZY
+    )
+    private List<BookEntity> auth_books = new ArrayList<>();
     public AuthorEntity() {
     }
     public AuthorEntity(long auth_id, String auth_name) {
@@ -39,4 +43,11 @@ public class AuthorEntity {
         this.auth_name = auth_name;
     }
 
+    public List<BookEntity> getAuth_books() {
+        return auth_books;
+    }
+
+    public void setAuth_books(List<BookEntity> auth_books) {
+        this.auth_books = auth_books;
+    }
 }

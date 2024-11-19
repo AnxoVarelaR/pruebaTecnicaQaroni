@@ -1,5 +1,9 @@
 package com.qrn.pruebaTecnicaQaroni.users.domain;
 
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.List;
+
 public class User {
 
     private Long usr_id;
@@ -7,15 +11,14 @@ public class User {
     private String usr_surname;
     private String usr_password;
     private String usr_email;
-    private int rol_id;
+    private List<GrantedAuthority> usr_authorities;
 
-    public User(long usr_id, String usr_name, String usr_surname, String usr_password, String usr_email, int rol_id) {
+    public User(long usr_id, String usr_name, String usr_surname, String usr_password, String usr_email) {
         this.usr_id = usr_id;
         this.usr_name = usr_name;
         this.usr_surname = usr_surname;
         this.usr_password = usr_password;
         this.usr_email = usr_email;
-        this.rol_id = rol_id;
     }
 
     public long getUsr_id() {
@@ -58,11 +61,11 @@ public class User {
         this.usr_email = usr_email;
     }
 
-    public int getRol_id() {
-        return rol_id;
+    public List<GrantedAuthority> getUsr_authorities() {
+        return usr_authorities;
     }
 
-    public void setRol_id(int rol_id) {
-        this.rol_id = rol_id;
+    public void setUsr_authorities(List<GrantedAuthority> usr_authorities) {
+        this.usr_authorities = usr_authorities;
     }
 }

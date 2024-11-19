@@ -1,10 +1,5 @@
 package com.qrn.pruebaTecnicaQaroni.authors.domain;
 
-import com.qrn.pruebaTecnicaQaroni.books.domain.Book;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Author {
 
     private Long auth_id;

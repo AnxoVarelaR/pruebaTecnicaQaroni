@@ -15,7 +15,9 @@ public class BookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bk_id;
     private String bk_name;
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.LAZY
+    )
     @JoinTable(
             name = "authors_books",
             joinColumns = @JoinColumn(name = "bk_id"),
