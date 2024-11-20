@@ -1,6 +1,7 @@
 package com.qrn.pruebaTecnicaQaroni.users.infrastructure;
 
 import com.qrn.pruebaTecnicaQaroni.users.application.UserService;
+import com.qrn.pruebaTecnicaQaroni.users.application.usecases.GenerateJwtCaseImpl;
 import com.qrn.pruebaTecnicaQaroni.users.application.usecases.GetUserUseCaseImpl;
 import com.qrn.pruebaTecnicaQaroni.users.application.usecases.LoginUserUseCaseImpl;
 import com.qrn.pruebaTecnicaQaroni.users.domain.ports.out.UserRepositoryPort;
@@ -14,7 +15,8 @@ public class UserConfig {
     public UserService userService(UserRepositoryPort userRepositoryPort){
         return new UserService(
                 new GetUserUseCaseImpl(userRepositoryPort),
-                new LoginUserUseCaseImpl(userRepositoryPort)
+                new LoginUserUseCaseImpl(userRepositoryPort),
+                new GenerateJwtCaseImpl(userRepositoryPort)
 
         );
     }

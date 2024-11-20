@@ -1,10 +1,9 @@
 package com.qrn.pruebaTecnicaQaroni.users.domain.ports.in;
 
-import com.qrn.pruebaTecnicaQaroni.users.domain.User;
+import com.qrn.pruebaTecnicaQaroni.users.infrastructure.UserEntity;
 
 import java.util.Map;
-import java.util.Objects;
 
 public interface GenerateJwtUseCase {
-    String generateToken(User user, Map<String, Objects> extraClaims);
+    String generateToken(UserEntity user, Map<String, Object> extraClaims);
 }

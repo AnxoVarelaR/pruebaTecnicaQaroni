@@ -1,7 +1,8 @@
 package com.qrn.pruebaTecnicaQaroni.users.application.usecases;
 
-import com.qrn.pruebaTecnicaQaroni.users.domain.User;
 import com.qrn.pruebaTecnicaQaroni.users.domain.ports.in.GenerateJwtUseCase;
+import com.qrn.pruebaTecnicaQaroni.users.domain.ports.out.UserRepositoryPort;
+import com.qrn.pruebaTecnicaQaroni.users.infrastructure.UserEntity;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,9 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 
 public class GenerateJwtCaseImpl implements GenerateJwtUseCase {
+
+    private final UserRepositoryPort userRepositoryPort;
+
+    public GenerateJwtCaseImpl(UserRepositoryPort userRepositoryPort) {
+        this.userRepositoryPort = userRepositoryPort;
+    }
 
     @Value("${security.jwt.expiration-minutes}")
     private long EXPIRATION_MINUTES;
@@ -21,7 +27,7 @@ public class GenerateJwtCaseImpl implements GenerateJwtUseCase {
     private String SECRET_KEY;
 
     @Override
-    public String generateToken(User user, Map<String, Objects> extraClaims) {
+    public String generateToken(UserEntity user, Map<String, Object> extraClaims) {
         Date createTokenDate = new Date(System.currentTimeMillis());
         Date expirationTokenDate = new Date(createTokenDate.getTime() + (EXPIRATION_MINUTES * 60 * 1000));
 

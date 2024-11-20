@@ -6,10 +6,12 @@ import com.qrn.pruebaTecnicaQaroni.users.domain.AuthResponse;
 import com.qrn.pruebaTecnicaQaroni.users.domain.User;
 import com.qrn.pruebaTecnicaQaroni.users.domain.ports.in.LoginUserUseCase;
 import com.qrn.pruebaTecnicaQaroni.users.domain.ports.out.UserRepositoryPort;
+import com.qrn.pruebaTecnicaQaroni.users.infrastructure.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginUserUseCaseImpl implements LoginUserUseCase {
@@ -32,11 +34,16 @@ public class LoginUserUseCaseImpl implements LoginUserUseCase {
         );
         authenticationManager.authenticate(authToken);
 
-        User user = userService.getUserByUsername(authRequest.getEmail()).get();
+        UserEntity user = userService.getUserByUsername(authRequest.getEmail()).get();
         String jwt = userService.generateToken(user, generateExtraClaims(user));
         return new AuthResponse(jwt);
     }
 
-    private Map<String, Object> generateExtraClaims(User user) {
+    private Map<String, Object> generateExtraClaims(UserEntity user) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("name",user.getUsr_email());
+        extraClaims.put("role", user.getUsr_roles().toString());
+
+        return extraClaims;
     }
 }
